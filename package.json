@@ -1,0 +1,25 @@
+{
+  "name": "part3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edward-designer/part3.git"
+  },
+  "author": "Edward Chung",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edward-designer/part3/issues"
+  },
+  "homepage": "https://github.com/edward-designer/part3#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}

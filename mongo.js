@@ -19,7 +19,7 @@ if(process.argv[3]&&process.argv[4]){
     mongoose
     .connect(url)
     .then((result) => {
-         const person = new Person({
+      const person = new Person({
           name: process.argv[3],
           number: process.argv[4],
       })

@@ -1,11 +1,11 @@
-DELETE http://localhost:3001/api/persons/1
+DELETE http://localhost:3001/api/persons/62a0cba2a8664910a83936cb
 
 ###
 POST http://localhost:3001/api/persons
 content-type: application/json
 
 {
-    "name": "Edward Chung",
+    "name": "Edward Chung 123",
     "number": "0123456789"
 }
 

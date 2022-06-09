@@ -1,25 +1,25 @@
-require('dotenv').config() 
+require('dotenv').config()
 
-const express = require('express');
-const morgan = require('morgan');
-const cors = require('cors'); // for CORS
-const Person = require('./models/people');
+const express = require('express')
+const morgan = require('morgan')
+const cors = require('cors') // for CORS
+const Person = require('./models/people')
 
-const app = express();
+const app = express()
 
 app.use(express.static('build'))
-app.use(express.json());
+app.use(express.json())
 app.use(morgan(function (tokens, req, res) {
     return [
-      tokens.method(req, res),
-      tokens.url(req, res),
-      tokens.status(req, res),
-      tokens.res(req, res, 'content-length'), '-',
-      tokens['response-time'](req, res), 'ms',
-      JSON.stringify(req.body)
+        tokens.method(req, res),
+        tokens.url(req, res),
+        tokens.status(req, res),
+        tokens.res(req, res, 'content-length'), '-',
+        tokens['response-time'](req, res), 'ms',
+        JSON.stringify(req.body)
     ].join(' ')
-}));
-app.use(cors()); 
+}))
+app.use(cors())
 
 
 app.get('/api/persons', (request, response, next) => {
@@ -35,11 +35,11 @@ app.get('/api/persons/:id', (request, response, next) => {
         }else{
             response.status(404).end()
         }
-      }).catch(error => next(error))
+    }).catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
-    const body = request.body;
+    const body = request.body
 
     if(!body.name||!body.number){
         return response.status(400).json({
@@ -50,25 +50,25 @@ app.put('/api/persons/:id', (request, response, next) => {
     const updatePerson = {
         name: body.name,
         number: body.number
-     }
+    }
 
     Person.findByIdAndUpdate(request.params.id, updatePerson, { new: true, runValidators: true, context: 'query' })
-    .then(updatedNote => {
-        response.json(updatedNote)
-      })
-      .catch(error => next(error))
+        .then(updatedNote => {
+            response.json(updatedNote)
+        })
+        .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndRemove(request.params.id)
-    .then(result => {
-      response.status(204).end()
-    }).catch(error => next(error))
+        .then(() => {
+            response.status(204).end()
+        }).catch(error => next(error))
 })
 
 
 app.post('/api/persons/', (request, response, next) => {
-    const body = request.body;
+    const body = request.body
 
     if(!body.name||!body.number){
         return response.status(400).json({
@@ -79,14 +79,14 @@ app.post('/api/persons/', (request, response, next) => {
         name: body.name,
         number: body.number
     })
-    person.save().then(savedPerson =>{
+    person.save().then(savedPerson => {
         response.status(200).json(savedPerson)
     }).catch(error => next(error))
 
 })
 
 app.get('/info', (request, response, next) => {
-    const now = new Date().toString();
+    const now = new Date().toString()
     Person.find({}).then(people => {
         response.send(`Phonebook has info for ${Object.keys(people).length} people<br/>${now}`)
     }).catch(error => next(error))
@@ -96,25 +96,24 @@ app.get('/info', (request, response, next) => {
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' })
 }
-  
+
 app.use(unknownEndpoint)
-  
+
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
 
     switch (error.name) {
-        case 'CastError':
-            return response.status(400).send({ error: 'malformatted id' })
-            break;
-        case 'ValidationError':
-            return response.status(400).send({ error: error.message })
-            break;
-    } 
-  
+    case 'CastError':
+        return response.status(400).send({ error: 'malformatted id' })
+    case 'ValidationError':
+        return response.status(400).send({ error: error.message })
+    }
+
     next(error)
 }
-  
+
 app.use(errorHandler)
 
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT
-app.listen(PORT,()=>console.log(`Server running on port ${PORT}`))
+app.listen(PORT,() => console.log(`Server running on port ${PORT}`))

@@ -10,8 +10,15 @@ const password = process.argv[2]
 const url = `mongodb+srv://fullstackopen:${password}@cluster0.qvdigxq.mongodb.net/phonebook?retryWrites=true&w=majority`
 
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String,
+    name: {
+      type: String,
+      minLength: 2,
+      required: true
+    },  
+    number: {
+      type: String,
+      required: true
+    }  
 })
 const Person = mongoose.model('person', personSchema)
 

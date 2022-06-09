@@ -52,7 +52,7 @@ app.put('/api/persons/:id', (request, response, next) => {
         number: body.number
      }
 
-    Person.findByIdAndUpdate(request.params.id, updatePerson, { new: true })
+    Person.findByIdAndUpdate(request.params.id, updatePerson, { new: true, runValidators: true, context: 'query' })
     .then(updatedNote => {
         response.json(updatedNote)
       })
@@ -78,8 +78,7 @@ app.post('/api/persons/', (request, response, next) => {
     const person = new Person ({
         name: body.name,
         number: body.number
-     })
-
+    })
     person.save().then(savedPerson =>{
         response.status(200).json(savedPerson)
     }).catch(error => next(error))
@@ -103,16 +102,19 @@ app.use(unknownEndpoint)
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
 
-    if (error.name === 'CastError') {
-      return response.status(400).send({ error: 'malformatted id' })
+    switch (error.name) {
+        case 'CastError':
+            return response.status(400).send({ error: 'malformatted id' })
+            break;
+        case 'ValidationError':
+            return response.status(400).send({ error: error.message })
+            break;
     } 
   
     next(error)
 }
   
 app.use(errorHandler)
-
-
 
 const PORT = process.env.PORT
 app.listen(PORT,()=>console.log(`Server running on port ${PORT}`))

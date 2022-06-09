@@ -5,7 +5,7 @@ POST http://localhost:3001/api/persons
 content-type: application/json
 
 {
-    "name": "Edward Chung 123",
+    "name": "E",
     "number": "0123456789"
 }
 
@@ -17,6 +17,6 @@ PUT http://localhost:3001/api/persons/62a0fe47720bf97fd8896311
 content-type: application/json
 
 {
-    "name": "Edward",
+    "name": "E",
     "number": "0123456789"
 }
